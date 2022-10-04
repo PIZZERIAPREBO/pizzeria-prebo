@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ve_fiscal_report_analytical_ledger_print" model="ir.ui.view">
+        <field name="name">ve.fiscal.report.analytical.ledger.print</field>
+        <field name="model">ve.fiscal.report.analytical.ledger</field>
+        <field name="arch" type="xml">
+            <form string="Reporte Libro Mayor Analitico">
+                <group>
+                     <field name="start_from_date" required ="1"/>
+                     <field name="close_from_date" required ="1"/>
+                </group>
+                <group>
+                     <field name="account_from"/>
+                     <field name="account_to"/>
+                </group>
+                <footer>
+                    <button name="get_report" string="Generate Report" type="object" default_focus="1" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+           </form>
+        </field>
+    </record>
+    <record id="action_ve_fiscal_report_analytical_ledger" model="ir.actions.act_window">
+        <field name="name">Reporte Mayor Analitico</field>
+        <field name="res_model">ve.fiscal.report.analytical.ledger</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="ve_fiscal_report_analytical_ledger_print"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem name="Reporte Mayor Analitico" 
+        id="wz_ve_fiscal_report_analytical_ledger_menu" 
+        parent="account.menu_finance_reports" 
+        action="action_ve_fiscal_report_analytical_ledger" />
+</odoo>

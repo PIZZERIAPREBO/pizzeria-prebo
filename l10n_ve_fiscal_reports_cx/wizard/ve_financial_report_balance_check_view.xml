@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="ve_financial_report_balance_check_print" model="ir.ui.view">
+            <field name="name">ve.financial.report.balance.check.print</field>
+            <field name="model">ve.financial.report.balance.check</field>
+            <field name="arch" type="xml">
+                <form string="Reporte Balance de Comprobacion">
+                    <group>
+                         <field name="start_from_date"/>
+                         <field name="close_from_date"/>
+                         <field name="company_id"/>
+                    </group>
+                    <group>
+                        <field name="display_account" widget="radio" modifiers="{'required':true}"/>
+                    </group>
+                    <footer>
+                        <button name="report_pdf" string="Generate Report PDF" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+               </form>
+            </field>
+        </record>
+        <record id="action_financial_report_balance_check" model="ir.actions.act_window">
+            <field name="name">Reporte Balance de Comprobacion</field>
+            <field name="res_model">ve.financial.report.balance.check</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="ve_financial_report_balance_check_print"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Reporte Balance de Comprobacion" 
+            id="wz_ve_financial_report_balance_check_act_menu" 
+            parent="account.menu_finance_reports" 
+            action="action_financial_report_balance_check"/>
+</odoo>
