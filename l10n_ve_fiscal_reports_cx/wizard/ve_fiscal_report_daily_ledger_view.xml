@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="ve_fiscal_report_daily_ledger_print" model="ir.ui.view">
+            <field name="name">ve.fiscal.report.daily.ledger.print</field>
+            <field name="model">ve.fiscal.report.daily.ledger</field>
+            <field name="arch" type="xml">
+                <form string="Reporte Libro Resumen">
+                    <group>
+                         <field name="start_from_date"/>
+                         <field name="close_from_date"/>
+                    </group>
+                    <footer>
+                        <button name="get_report" string="Generate Report" type="object" default_focus="1" class="oe_highlight"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+               </form>
+            </field>
+        </record>
+        <record id="action_ve_fiscal_report_daily_ledger" model="ir.actions.act_window">
+            <field name="name">Reporte Libro Resumen</field>
+            <field name="res_model">ve.fiscal.report.daily.ledger</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="ve_fiscal_report_daily_ledger_print"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Reporte Libro Resumen" 
+            id="wizard_ve_fiscal_report_daily_ledger_action_menu" 
+            parent="account.menu_finance_reports" 
+            action="action_ve_fiscal_report_daily_ledger" />
+</odoo>
