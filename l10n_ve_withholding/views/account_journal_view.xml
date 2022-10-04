@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_journal_withholding_form" model="ir.ui.view">
+        <field name="model">account.journal</field>
+        <field name="name">account.journal.form.inherit.withholding_target</field>
+        <field name="inherit_id" ref="account.view_account_journal_form"/>
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+                <field name="is_payment_methods_selected" invisible="1"/>
+                <field name="withholding_target" attrs="{
+                    'invisible': [ ('is_payment_methods_selected', '!=', True) ]
+                    }"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
