@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="template_balance_check">
+    	<t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <!--Header-->
+                    <table style="width:100%; margin: 0 auto; border: 0px; padding:0px;">
+                        <tr>
+                            <td style="text-align:center;font-size: 18px;"><b><span t-esc="company_name"/> - RIF.: <span t-esc="company_vat"/> </b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;font-size: 12px;"><b>Balance de Comprobacion</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;font-size: 12px;"><b>Del <span t-esc="date_from"/> al <span t-esc="date_to"/> </b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;font-size: 12px;"><b>(Expresado en Bolívares)</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;font-size: 10px;">Emitido el <span t-esc="today"/> </td>
+                        </tr>
+                    </table>
+                    <!--Detail-->
+                    <table style="100%;margin-top:30px;border:0px;padding:0px;font-size:12px;">
+                        <thead>
+                            <tr>
+                                <th style="width:100px; text-align:left;border-bottom:1px solid #000000">
+                                    CODIGO
+                                </th>
+                                <th style="width:300px; text-align:left;border-bottom:1px solid #000000">
+                                    NOMBRE DE LA CUENTA
+                                </th>
+                                <th style="width:200px; text-align:right;border-bottom:1px solid #000000">
+                                    SALDO ANT.
+                                </th>
+                                <th style="width:200px; text-align:right;border-bottom:1px solid #000000">
+                                    DEBE
+                                </th>
+                                <th style="width:200px; text-align:right;border-bottom:1px solid #000000">
+                                    HABER
+                                </th>
+                                <th style="width:200px; text-align:right;border-bottom:1px solid #000000">
+                                    SALDO
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Total General-->
+                                <t t-set="tga" t-value="0"/>
+                                <t t-set="tgd" t-value="0"/>
+                                <t t-set="tgh" t-value="0"/>
+                                <t t-set="tgs" t-value="0"/>
+                            <!--ACTIVOS-->
+                                <!--Caja y Bancos-->
+                                <t t-set="ttabc" t-value="0"/>
+                                <t t-set="ttdbc" t-value="0"/>
+                                <t t-set="tthbc" t-value="0"/>
+                                <t t-set="ttsbc" t-value="0"/>
+                                <!--Activos  Cuentas por cobrar-->
+                                <t t-set="ttacc" t-value="0"/>
+                                <t t-set="ttdcc" t-value="0"/>
+                                <t t-set="tthcc" t-value="0"/>
+                                <t t-set="ttscc" t-value="0"/>
+                                <!--Activos  Circulantes-->
+                                <t t-set="ttaac" t-value="0"/>
+                                <t t-set="ttdac" t-value="0"/>
+                                <t t-set="tthac" t-value="0"/>
+                                <t t-set="ttsac" t-value="0"/>
+                                <!--Activos  No Circulantes-->
+                                <t t-set="ttaanc" t-value="0"/>
+                                <t t-set="ttdanc" t-value="0"/>
+                                <t t-set="tthanc" t-value="0"/>
+                                <t t-set="ttsanc" t-value="0"/>
+                                <!--Activos  Fijos-->
+                                <t t-set="ttaaf" t-value="0"/>
+                                <t t-set="ttdaf" t-value="0"/>
+                                <t t-set="tthaf" t-value="0"/>
+                                <t t-set="ttsaf" t-value="0"/>
+                                <!--Totales Activos -->
+                                <t t-set="ttaa" t-value="0"/>
+                                <t t-set="ttda" t-value="0"/>
+                                <t t-set="ttha" t-value="0"/>
+                                <t t-set="ttsa" t-value="0"/>
+                        	    <t t-foreach="asset_liquidity_lines" t-as="l">
+                                    <tr>
+                                        <t t-set="ttabc" t-value="ttabc + l[2]"/>
+                                        <t t-set="ttdbc" t-value="ttdbc + l[3]"/>
+                                        <t t-set="tthbc" t-value="tthbc + l[4]"/>
+                                        <t t-set="ttsbc" t-value="ttsbc + l[5]"/>
+                                        <t t-set="ttaa" t-value="ttaa + l[2]"/>
+                                        <t t-set="ttda" t-value="ttda + l[3]"/>
+                                        <t t-set="ttha" t-value="ttha + l[4]"/>
+                                        <t t-set="ttsa" t-value="ttsa + l[5]"/>
+                                      <td  style="text-align:left;"> <span t-esc="l[0]"/> </td>
+                                      <td  style="text-align:left;"> <span t-esc="l[1]"/> </td>
+                                      <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(l[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                      <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(l[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                      <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(l[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                      <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(l[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                    </tr>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Banco y Caja</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttabc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdbc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthbc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsbc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <t t-foreach="asset_receivable_lines" t-as="lr">
+                                    <tr>
+                                        <t t-set="ttacc" t-value="ttacc + lr[2]"/>
+                                        <t t-set="ttdcc" t-value="ttdcc + lr[3]"/>
+                                        <t t-set="tthcc" t-value="tthcc + lr[4]"/>
+                                        <t t-set="ttscc" t-value="ttscc + lr[5]"/>
+                                        <t t-set="ttaa" t-value="ttaa + lr[2]"/>
+                                        <t t-set="ttda" t-value="ttda + lr[3]"/>
+                                        <t t-set="ttha" t-value="ttha + lr[4]"/>
+                                        <t t-set="ttsa" t-value="ttsa + lr[5]"/>
+                                      <td  style="text-align:left;"> <span t-esc="lr[0]"/> </td>
+                                      <td  style="text-align:left;"> <span t-esc="lr[1]"/> </td>
+                                      <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lr[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                      <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lr[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                      <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lr[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                      <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lr[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                    </tr>
+                        	    </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Cuentas por Cobrar</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttacc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdcc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthcc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttscc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <t t-foreach="asset_current_assets_lines" t-as="lca">
+                                    <t t-if="lca">
+                                        <t t-set="ttaac" t-value="ttaac + lca[2]"/>
+                                        <t t-set="ttdac" t-value="ttdac + lca[3]"/>
+                                        <t t-set="tthac" t-value="tthac + lca[4]"/>
+                                        <t t-set="ttsac" t-value="ttsac + lca[5]"/>
+                                        <t t-set="ttaa" t-value="ttaa + lca[2]"/>
+                                        <t t-set="ttda" t-value="ttda + lca[3]"/>
+                                        <t t-set="ttha" t-value="ttha + lca[4]"/>
+                                        <t t-set="ttsa" t-value="ttsa + lca[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="lca[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="lca[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lca[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lca[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lca[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lca[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Activos Circulantes</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttaac).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdac).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthac).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsac).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <t t-foreach="asset_nocurrent_assets_lines" t-as="lnc">
+                                    <t t-if="lnc">
+                                        <t t-set="ttaanc" t-value="ttaanc + lnc[2]"/>
+                                        <t t-set="ttdanc" t-value="ttdanc + lnc[3]"/>
+                                        <t t-set="tthanc" t-value="tthanc + lnc[4]"/>
+                                        <t t-set="ttsanc" t-value="ttsanc + lnc[5]"/>
+                                        <t t-set="ttaa" t-value="ttaa + lnc[2]"/>
+                                        <t t-set="ttda" t-value="ttda + lnc[3]"/>
+                                        <t t-set="ttha" t-value="ttha + lnc[4]"/>
+                                        <t t-set="ttsa" t-value="ttsa + lnc[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="lnc[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="lnc[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lnc[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lnc[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lnc[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lnc[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Activos no circulantes</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"> <b><span t-esc="'{:,.2f}'.format(ttaanc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"> <b><span t-esc="'{:,.2f}'.format(ttdanc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"> <b><span t-esc="'{:,.2f}'.format(tthanc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"> <b><span t-esc="'{:,.2f}'.format(ttsanc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <t t-foreach="asset_fixed_assets_lines" t-as="lfa">
+                                    <t t-if="lfa">
+                                        <t t-set="ttaaf" t-value="ttaaf + lfa[2]"/>
+                                        <t t-set="ttdaf" t-value="ttdaf + lfa[3]"/>
+                                        <t t-set="tthaf" t-value="tthaf + lfa[4]"/>
+                                        <t t-set="ttsaf" t-value="ttsaf + lfa[5]"/>
+                                        <t t-set="ttaa" t-value="ttaa + lfa[2]"/>
+                                        <t t-set="ttda" t-value="ttda + lfa[3]"/>
+                                        <t t-set="ttha" t-value="ttha + lfa[4]"/>
+                                        <t t-set="ttsa" t-value="ttsa + lfa[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="lfa[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="lfa[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lfa[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lfa[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lfa[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lfa[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Activos Fijos</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttaaf).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdaf).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthaf).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsaf).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <tr style="border-top: 1px solid #AAAAAA">
+                                    <t t-set="tga" t-value="tga + ttaa"/>
+                                    <t t-set="tgd" t-value="tgd + ttda"/>
+                                    <t t-set="tgh" t-value="tgh + ttha"/>
+                                    <t t-set="tgs" t-value="tgs + ttsa"/>
+                                    <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                    <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>TOTAL ACTIVOS</b></td>
+                                    <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttaa).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttda).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttha).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsa).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                </tr>
+
+                            <!--PASIVOS-->
+                                <!--Pasivos Circulantes-->
+                                <t t-set="ttacl" t-value="0"/>
+                                <t t-set="ttdcl" t-value="0"/>
+                                <t t-set="tthcl" t-value="0"/>
+                                <t t-set="ttscl" t-value="0"/>
+                                <!--Pasivos Cuentas por pagar-->
+                                <t t-set="ttapy" t-value="0"/>
+                                <t t-set="ttdpy" t-value="0"/>
+                                <t t-set="tthpy" t-value="0"/>
+                                <t t-set="ttspy" t-value="0"/>
+                                <!--Pasivos No Circulantes-->
+                                <t t-set="ttancl" t-value="0"/>
+                                <t t-set="ttdncl" t-value="0"/>
+                                <t t-set="tthncl" t-value="0"/>
+                                <t t-set="ttsncl" t-value="0"/>
+                                <!--Totales Pasivos-->
+                                <t t-set="ttap" t-value="0"/>
+                                <t t-set="ttdp" t-value="0"/>
+                                <t t-set="tthp" t-value="0"/>
+                                <t t-set="ttsp" t-value="0"/>
+                                <t t-foreach="liability_current_liabilities_lines" t-as="lcl">
+                                    <t t-if="lcl">
+                                        <t t-set="ttacl" t-value="ttacl + lcl[2]"/>
+                                        <t t-set="ttdcl" t-value="ttdcl + lcl[3]"/>
+                                        <t t-set="tthcl" t-value="tthcl + lcl[4]"/>
+                                        <t t-set="ttscl" t-value="ttscl + lcl[5]"/>
+                                        <t t-set="ttap" t-value="ttap + lcl[2]"/>
+                                        <t t-set="ttdp" t-value="ttdp + lcl[3]"/>
+                                        <t t-set="tthp" t-value="tthp + lcl[4]"/>
+                                        <t t-set="ttsp" t-value="ttsp + lcl[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="lcl[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="lcl[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lcl[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lcl[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lcl[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lcl[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Pasivos Circulantes</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttacl).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdcl).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthcl).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttscl).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <t t-foreach="liability_payable_lines" t-as="lpy">
+                                    <t t-if="lpy">
+                                        <t t-set="ttapy" t-value="ttapy + lpy[2]"/>
+                                        <t t-set="ttdpy" t-value="ttdpy + lpy[3]"/>
+                                        <t t-set="tthpy" t-value="tthpy + lpy[4]"/>
+                                        <t t-set="ttspy" t-value="ttspy + lpy[5]"/>
+                                        <t t-set="ttap" t-value="ttap + lpy[2]"/>
+                                        <t t-set="ttdp" t-value="ttdp + lpy[3]"/>
+                                        <t t-set="tthp" t-value="tthp + lpy[4]"/>
+                                        <t t-set="ttsp" t-value="ttsp + lpy[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="lpy[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="lpy[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lpy[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lpy[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lpy[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lpy[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Cuestas por Pagar</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttapy).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdpy).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthpy).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttspy).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <t t-foreach="liability_current_liabilities_lines" t-as="lncl">
+                                    <t t-if="lncl">
+                                        <t t-set="ttancl" t-value="ttancl + lncl[2]"/>
+                                        <t t-set="ttdncl" t-value="ttdncl + lncl[3]"/>
+                                        <t t-set="tthncl" t-value="tthncl + lncl[4]"/>
+                                        <t t-set="ttsncl" t-value="ttsncl + lncl[5]"/>
+                                        <t t-set="ttap" t-value="ttap + lncl[2]"/>
+                                        <t t-set="ttdp" t-value="ttdp + lncl[3]"/>
+                                        <t t-set="tthp" t-value="tthp + lncl[4]"/>
+                                        <t t-set="ttsp" t-value="ttsp + lncl[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="lncl[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="lncl[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lncl[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lncl[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lncl[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lncl[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Pasivos No Circulantes</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttancl).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdncl).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthncl).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsncl).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <tr style="border-top: 1px solid #AAAAAA">
+                                    <t t-set="tga" t-value="tga + ttap"/>
+                                    <t t-set="tgd" t-value="tgd + ttdp"/>
+                                    <t t-set="tgh" t-value="tgh + tthp"/>
+                                    <t t-set="tgs" t-value="tgs + ttsp"/>
+                                    <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                    <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>TOTAL PASIVOS</b></td>
+                                    <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttap).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdp).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthp).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsp).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                </tr>
+
+                            <!--CAPITAL-->
+                                <!--Capital-->
+                                <t t-set="ttaeq" t-value="0"/>
+                                <t t-set="ttdeq" t-value="0"/>
+                                <t t-set="ttheq" t-value="0"/>
+                                <t t-set="ttseq" t-value="0"/>
+                                <!--Totales Capital-->
+                                <t t-set="ttac" t-value="0"/>
+                                <t t-set="ttdc" t-value="0"/>
+                                <t t-set="tthc" t-value="0"/>
+                                <t t-set="ttsc" t-value="0"/>
+                                <t t-foreach="equity_equity_lines" t-as="leq">
+                                    <t t-if="leq">
+                                        <t t-set="ttaeq" t-value="ttaeq + leq[2]"/>
+                                        <t t-set="ttdeq" t-value="ttdeq + leq[3]"/>
+                                        <t t-set="ttheq" t-value="ttheq + leq[4]"/>
+                                        <t t-set="ttseq" t-value="ttseq + leq[5]"/>
+                                        <t t-set="ttac" t-value="ttac + leq[2]"/>
+                                        <t t-set="ttdc" t-value="ttdc + leq[3]"/>
+                                        <t t-set="tthc" t-value="tthc + leq[4]"/>
+                                        <t t-set="ttsc" t-value="ttsc + leq[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="leq[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="leq[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(leq[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(leq[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(leq[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(leq[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Capital y Reservas</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttaeq).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdeq).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttheq).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttseq).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <tr style="border-top: 1px solid #AAAAAA">
+                                    <t t-set="tga" t-value="tga + ttac"/>
+                                    <t t-set="tgd" t-value="tgd + ttdc"/>
+                                    <t t-set="tgh" t-value="tgh + tthc"/>
+                                    <t t-set="tgs" t-value="tgs + ttsc"/>
+                                    <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                    <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>TOTAL CAPITAL</b></td>
+                                    <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttac).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsc).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                </tr>
+
+                            <!--INGRESOS-->
+                                <!--Ingresos-->
+                                <t t-set="ttain" t-value="0"/>
+                                <t t-set="ttdin" t-value="0"/>
+                                <t t-set="tthin" t-value="0"/>
+                                <t t-set="ttsin" t-value="0"/>
+                                <!--Otros Ingresos-->
+                                <t t-set="ttaoin" t-value="0"/>
+                                <t t-set="ttdoin" t-value="0"/>
+                                <t t-set="tthoin" t-value="0"/>
+                                <t t-set="ttsoin" t-value="0"/>
+                                <!--Totales Ingresos-->
+                                <t t-set="ttai" t-value="0"/>
+                                <t t-set="ttdi" t-value="0"/>
+                                <t t-set="tthi" t-value="0"/>
+                                <t t-set="ttsi" t-value="0"/>
+                                <t t-foreach="income_income_lines" t-as="lin">
+                                    <t t-if="lin">
+                                        <t t-set="ttain" t-value="ttain + lin[2]"/>
+                                        <t t-set="ttdin" t-value="ttdin + lin[3]"/>
+                                        <t t-set="tthin" t-value="tthin + lin[4]"/>
+                                        <t t-set="ttsin" t-value="ttsin + lin[5]"/>
+                                        <t t-set="ttai" t-value="ttai + lin[2]"/>
+                                        <t t-set="ttdi" t-value="ttdi + lin[3]"/>
+                                        <t t-set="tthi" t-value="tthi + lin[4]"/>
+                                        <t t-set="ttsi" t-value="ttsi + lin[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="lin[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="lin[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lin[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lin[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lin[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lin[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Ingresos </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttain).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdin).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthin).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsin).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <t t-foreach="income_other_income_lines" t-as="loin">
+                                    <t t-if="loin">
+                                        <t t-set="ttaoin" t-value="ttaoin + loin[2]"/>
+                                        <t t-set="ttdoin" t-value="ttdoin + loin[3]"/>
+                                        <t t-set="tthoin" t-value="tthoin + loin[4]"/>
+                                        <t t-set="ttsoin" t-value="ttsoin + loin[5]"/>
+                                        <t t-set="ttai" t-value="ttai + loin[2]"/>
+                                        <t t-set="ttdi" t-value="ttdi + loin[3]"/>
+                                        <t t-set="tthi" t-value="tthi + loin[4]"/>
+                                        <t t-set="ttsi" t-value="ttsi + loin[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="loin[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="loin[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(loin[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(loin[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(loin[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(loin[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Otros Ingresos </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttaoin).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdoin).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthoin).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsoin).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <tr style="border-top: 1px solid #AAAAAA">
+                                    <t t-set="tga" t-value="tga + ttai"/>
+                                    <t t-set="tgd" t-value="tgd + ttdi"/>
+                                    <t t-set="tgh" t-value="tgh + tthi"/>
+                                    <t t-set="tgs" t-value="tgs + ttsi"/>
+                                    <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                    <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>TOTAL INGRESOS</b></td>
+                                    <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttai).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdi).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthi).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsi).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                </tr>
+
+                            <!--EGRESOS-->
+                                <!--Egresos-->
+                                <t t-set="ttaex" t-value="0"/>
+                                <t t-set="ttdex" t-value="0"/>
+                                <t t-set="tthex" t-value="0"/>
+                                <t t-set="ttsex" t-value="0"/>
+                                <!--Depreciaciones-->
+                                <t t-set="ttadp" t-value="0"/>
+                                <t t-set="ttddp" t-value="0"/>
+                                <t t-set="tthdp" t-value="0"/>
+                                <t t-set="ttsdp" t-value="0"/>
+                                <!--Costo en ventas-->
+                                <t t-set="ttacv" t-value="0"/>
+                                <t t-set="ttdcv" t-value="0"/>
+                                <t t-set="tthcv" t-value="0"/>
+                                <t t-set="ttscv" t-value="0"/>
+                                <!--Totales Egresos-->
+                                <t t-set="ttae" t-value="0"/>
+                                <t t-set="ttde" t-value="0"/>
+                                <t t-set="tthe" t-value="0"/>
+                                <t t-set="ttse" t-value="0"/>
+                                <t t-foreach="expense_expense_lines" t-as="lex">
+                                    <t t-if="lex">
+                                        <t t-set="ttaex" t-value="ttaex + lex[2]"/>
+                                        <t t-set="ttdex" t-value="ttdex + lex[3]"/>
+                                        <t t-set="tthex" t-value="tthex + lex[4]"/>
+                                        <t t-set="ttsex" t-value="ttsex + lex[5]"/>
+                                        <t t-set="ttae" t-value="ttae + lex[2]"/>
+                                        <t t-set="ttde" t-value="ttde + lex[3]"/>
+                                        <t t-set="tthe" t-value="tthe + lex[4]"/>
+                                        <t t-set="ttse" t-value="ttse + lex[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="lex[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="lex[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lex[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lex[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lex[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lex[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Gastos</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttaex).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdex).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthex).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsex).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <t t-foreach="expense_depreciation_lines" t-as="ldp">
+                                    <t t-if="ldp">
+                                        <t t-set="ttadp" t-value="ttadp + ldp[2]"/>
+                                        <t t-set="ttddp" t-value="ttddp + ldp[3]"/>
+                                        <t t-set="tthdp" t-value="tthdp + ldp[4]"/>
+                                        <t t-set="ttsdp" t-value="ttsdp + ldp[5]"/>
+                                        <t t-set="ttae" t-value="ttae + ldp[2]"/>
+                                        <t t-set="ttde" t-value="ttde + ldp[3]"/>
+                                        <t t-set="tthe" t-value="tthe + ldp[4]"/>
+                                        <t t-set="ttse" t-value="ttse + ldp[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="ldp[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="ldp[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(ldp[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(ldp[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(ldp[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(ldp[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Gastos de Depreciacion</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttadp).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttddp).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthdp).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsdp).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <t t-foreach="expense_cost_revenue_lines" t-as="lcv">
+                                    <t t-if="lcv">
+                                        <t t-set="ttacv" t-value="ttacv + lcv[2]"/>
+                                        <t t-set="ttdcv" t-value="ttdcv + lcv[3]"/>
+                                        <t t-set="tthcv" t-value="tthcv + lcv[4]"/>
+                                        <t t-set="ttscv" t-value="ttscv + lcv[5]"/>
+                                        <t t-set="ttae" t-value="ttae + lcv[2]"/>
+                                        <t t-set="ttde" t-value="ttde + lcv[3]"/>
+                                        <t t-set="tthe" t-value="tthe + lcv[4]"/>
+                                        <t t-set="ttse" t-value="ttse + lcv[5]"/>
+                                        <tr>
+                                          <td  style="text-align:left;"> <span t-esc="lcv[0]"/> </td>
+                                          <td  style="text-align:left;"> <span t-esc="lcv[1]"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lcv[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lcv[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lcv[4]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                          <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(lcv[5]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                        </tr>
+                                    </t>
+                                </t>
+                                    <tr style="border-top: 1px solid #AAAAAA">
+                                        <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                        <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>Total Costos de Ventas</b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttacv).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdcv).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthcv).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                        <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttscv).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    </tr>
+                                <tr style="border-top: 1px solid #AAAAAA">
+                                    <t t-set="tga" t-value="tga + ttae"/>
+                                    <t t-set="tgd" t-value="tgd + ttde"/>
+                                    <t t-set="tgh" t-value="tgh + tthe"/>
+                                    <t t-set="tgs" t-value="tgs + ttse"/>
+                                    <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                    <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>TOTAL EGRESOS</b></td>
+                                    <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttae).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttde).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tthe).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                    <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttse).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr style="border-top: 1px solid #AAAAAA">
+                                <td style="text-align:left;border-top:1px solid #000000">  </td>
+                                <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000">TOTALES GENERAL</td>
+                                <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tga).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tgd).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tgh).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(tgs).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                            </tr>
+                            <tr>
+                                <td  style="text-align:left;">  </td>
+                                <td  style="text-align:left;">  </td>
+                                <td  style="text-align:right;border-top:1px solid #000000"> <h4 style="color: white;">_</h4> </td>
+                                <td  style="text-align:right;border-top:1px solid #000000"> <h4 style="color: white;">_</h4> </td>
+                                <td  style="text-align:right;border-top:1px solid #000000"> <h4 style="color: white;">_</h4> </td>
+                                <td  style="text-align:right;border-top:1px solid #000000"> <h4 style="color: white;">_</h4> </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+    	</t>
+    </template>
+
+    <record id="paperformat_balance_check_report" model="report.paperformat">
+        <field name="name">Reporte Balance de Comprobacion</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">6</field>
+        <field name="margin_left">2</field>
+        <field name="margin_right">2</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">100</field>
+    </record>
+
+    <!-- Base Template -->
+    <template id="financial_balance_check">
+        <t t-call="web.html_container">
+            <t t-call="l10n_ve_fiscal_reports_cx.template_balance_check" t-lang="lang"/>
+        </t>
+    </template>
+</odoo>

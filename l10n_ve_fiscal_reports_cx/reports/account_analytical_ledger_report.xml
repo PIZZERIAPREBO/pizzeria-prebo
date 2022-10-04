@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="template_analytical_ledger">
+    	<t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <t t-set="ttgdebit" t-value="0"/>
+                    <t t-set="ttgcredit" t-value="0"/>
+                    <t t-set="ttgsaldo" t-value="0"/>
+                    <!--Header-->
+                    <table style="width:100%; margin: 0 auto; border: 0px; padding:0px;">
+                        <tr>
+                            <td style="text-align:center;font-size: 18px;"><b><span t-esc="company_name"/> - RIF.: <span t-esc="company_vat"/> </b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;font-size: 16px;"><b>Mayor Analitico</b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;font-size: 14px;"><b>Del <span t-esc="date_from"/> al <span t-esc="date_to"/> </b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;font-size: 10px;">Emitido el <span t-esc="today"/> </td>
+                        </tr>
+                    </table>
+                    <!--Detail-->
+                    <table style="width:100%;margin-top:30px;border:0px;padding:0px;font-size:12px;">
+                        <t t-foreach="acounts" t-as="a">
+                            <t t-set="lines" t-value="move_lines.filtered(lambda l: l.account_id.id == a[0])"/>
+                            <tr>
+                              <td  style="text-align:left;width:100%;"><b>Codigo: <span t-esc="a[1]"/> <span t-esc="a[2]"/></b></td>
+                            </tr>
+                            <tr>
+                                <td  style="text-align:left;width:100%;">
+                                    <!-- Detalle por cuenta -->
+                                    <t t-set="ttdebit" t-value="0"/>
+                                    <t t-set="ttcredit" t-value="0"/>
+                                    <t t-set="ttsaldo" t-value="0"/>
+                                    <table style="100%;margin-top:30px;border:0px;padding:0px;font-size:12px;">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:80px; text-align:left;border-bottom:1px solid #000000">
+                                                    Fecha
+                                                </th>
+                                                <th style="width:100px; text-align:left;border-bottom:1px solid #000000">
+                                                    Nro. Compro
+                                                </th>
+                                                <th style="width:200px; text-align:left;border-bottom:1px solid #000000">
+                                                    Referencia
+                                                </th>
+                                                <th style="width:360px; text-align:left;border-bottom:1px solid #000000">
+                                                    Descripcion
+                                                </th>
+                                                <th style="width:120px; text-align:right;border-bottom:1px solid #000000">
+                                                    Debe
+                                                </th>
+                                                <th style="width:120px; text-align:right;border-bottom:1px solid #000000">
+                                                    Haber
+                                                </th>
+                                                <th style="width:120px; text-align:right;border-bottom:1px solid #000000">
+                                                    Saldo
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <t t-set="ttsaldo" t-value="ttsaldo + a[3]"/>
+                                                <td  style="text-align:left;"> </td>
+                                                <td  style="text-align:left;"> </td>
+                                                <td  style="text-align:left;"> </td>
+                                                <td  style="text-align:left;"> Saldo Anterior</td>
+                                                <td style="text-align:right;"> </td>
+                                                <td style="text-align:right;"> </td>
+                                                <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(a[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                            </tr>
+                                    	    <t t-foreach="lines" t-as="l">
+                                                <tr>
+                                                    <t t-set="ttdebit" t-value="ttdebit + l.debit"/>
+                                                    <t t-set="ttcredit" t-value="ttcredit + l.credit"/>
+                                                    <t t-set="ttsaldo" t-value="(ttsaldo + l.debit) - l.credit"/>
+                                                  <td  style="text-align:left;"> <span t-esc="l.date"/> </td>
+                                                  <td  style="text-align:left;"> <span t-esc="l.move_id.name"/> </td>
+                                                  <td  style="text-align:left;"> <span t-esc="l.move_id.ref"/> </td>
+                                                  <td  style="text-align:left;"> <span t-esc="l.name"/> </td>
+                                                  <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(l.debit).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                                  <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(l.credit).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                                  <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(ttsaldo).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                                </tr>
+                                            </t>
+                                            <tr style="border-top: 1px solid #AAAAAA">
+                                                <t t-set="ttgdebit" t-value="ttgdebit + ttdebit"/>
+                                                <t t-set="ttgcredit" t-value="ttgcredit + ttcredit"/>
+                                                <t t-set="ttgsaldo" t-value="ttgsaldo + ttsaldo"/>
+                                                <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                                <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                                <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                                <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b>TOTALES ............  </b></td>
+                                                <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttdebit).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                                <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttcredit).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                                <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttsaldo).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                            </tr>
+                                            <tr>
+                                                <td  style="text-align:left;">  </td>
+                                                <td  style="text-align:left;">  </td>
+                                                <td  style="text-align:left;">  </td>
+                                                <td  style="text-align:left;">  </td>
+                                                <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttgdebit).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                                <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttgcredit).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                                <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"><b> <span t-esc="'{:,.2f}'.format(ttgsaldo).replace(',', '@').replace('.', ',').replace('@', '.')"/> </b></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
+                    <table style="width:100%;margin-top:30px;border:0px;padding:0px;font-size:12px;">
+                        <tr>
+                            <td style="width:80px; text-align:left;border-top:1px solid #000000">  </td>
+                            <td style="width:100px; text-align:left;border-top:1px solid #000000"> </td>
+                            <td style="width:560px; text-align:left;border-top:1px solid #000000"> </td>
+                            <td style="width:120px; text-align:right;border-top:1px solid #000000"> </td>
+                            <td style="width:120px; text-align:right;border-top:1px solid #000000"> </td>
+                            <td style="width:120px; text-align:right;border-top:1px solid #000000"> </td>
+                        </tr>
+                    </table>
+                </div>
+            </t>
+    	</t>
+    </template>
+
+    <record id="paperformat_analytical_ledger_report" model="report.paperformat">
+        <field name="name">Reporte Libro Mayor Analitico</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">6</field>
+        <field name="margin_left">2</field>
+        <field name="margin_right">2</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">100</field>
+    </record>
+
+    <report
+            id="ve_analytical_ledger_report"
+            string="Reporte Libro Mayor Analitico"
+            model="ve.fiscal.report.analytical.ledger"
+            report_type="qweb-pdf"
+            name="l10n_ve_fiscal_reports_cx.template_analytical_ledger"
+            paperformat="l10n_ve_fiscal_reports_cx.paperformat_analytical_ledger_report"/>
+</odoo>
+

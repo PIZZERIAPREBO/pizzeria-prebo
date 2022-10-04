@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="template_daily_ledger">
+    	<t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page">
+                    <!--Header-->
+                    <table style="width:100%; margin: 0 auto; border: 0px; padding:0px;">
+                        <tr>
+                            <td style="text-align:center;font-size: 18px;"><b><span t-esc="company_name"/> - RIF.: <span t-esc="company_vat"/> </b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;font-size: 12px;"><b>Resumen de Diario </b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;font-size: 12px;"><b>Del <span t-esc="date_from"/> al <span t-esc="date_to"/> </b></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center;font-size: 10px;">Emitido el <span t-esc="today"/> </td>
+                        </tr>
+                    </table>
+                    <!--Detail-->
+                    <table style="100%;margin-top:30px;border:0px;padding:0px;font-size:12px;">
+                        <thead>
+                            <tr>
+                                <th style="width:100px; text-align:left;border-bottom:1px solid #000000">
+                                    CODIGO
+                                </th>
+                                <th style="width:500px; text-align:left;border-bottom:1px solid #000000">
+                                    NOMBRE DE LA CUENTA
+                                </th>
+                                <th style="width:200px; text-align:right;border-bottom:1px solid #000000">
+                                    DEBE
+                                </th>
+                                <th style="width:200px; text-align:right;border-bottom:1px solid #000000">
+                                    HABER
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                    	    <t t-foreach="lines" t-as="l">
+                                <tr>
+                                  <td  style="text-align:left;"> <span t-esc="l[0]"/> </td>
+                                  <td  style="text-align:left;"> <span t-esc="l[1]"/> </td>
+                                  <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(l[2]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                  <td style="text-align:right;"> <span t-esc="'{:,.2f}'.format(l[3]).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                </tr>
+                    	    </t>
+                        </tbody>
+                        <tfoot>
+                            <tr style="border-top: 1px solid #AAAAAA">
+                                <td  style="text-align:left;border-top:1px solid #000000">  </td>
+                                <td  style="text-align:right;padding-top: 3px;border-top:1px solid #000000">TOTALES ............  </td>
+                                <td style="text-align:right;padding-top: 3px;border-top:1px solid #000000"> <span t-esc="'{:,.2f}'.format(total_debit).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                                <td style="text-align:right;padding-top: 2px;border-top:1px solid #000000"> <span t-esc="'{:,.2f}'.format(total_credit).replace(',', '@').replace('.', ',').replace('@', '.')"/> </td>
+                            </tr>
+                            <tr>
+                                <td  style="text-align:left;">  </td>
+                                <td  style="text-align:left;">  </td>
+                                <td  style="text-align:right;border-top:1px solid #000000"> <h4 style="color: white;">_</h4> </td>
+                                <td  style="text-align:right;border-top:1px solid #000000"> <h4 style="color: white;">_</h4> </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+    	</t>
+    </template>
+
+    <record id="paperformat_daily_ledger_report" model="report.paperformat">
+        <field name="name">Reporte Libro Resumen</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">6</field>
+        <field name="margin_left">2</field>
+        <field name="margin_right">2</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">100</field>
+    </record>
+
+    <report
+            id="ve_daily_ledger_report"
+            string="Reporte Libro Resumen"
+            model="ve.fiscal.report.daily.ledger"
+            report_type="qweb-pdf"
+            name="l10n_ve_fiscal_reports_cx.template_daily_ledger"
+            paperformat="l10n_ve_fiscal_reports_cx.paperformat_daily_ledger_report"/>
+</odoo>
